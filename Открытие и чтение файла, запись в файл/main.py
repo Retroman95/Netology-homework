@@ -14,29 +14,22 @@ def read_cookbook():
             num_ingredients = int(f.readline())
             for i in range(1, num_ingredients+1):
                  ing = f.readline().split(' | ')
-                 dish_ingredients.append({'ingredient_name': ing[0], 'quantity': ing[1], 'measure': ing[2].strip()})
+                 dish_ingredients.append({'ingredient_name': ing[0], 'quantity': int(ing[1]), 'measure': ing[2].strip()})
             cook_book[line.strip()] = dish_ingredients
             f.readline()
     return cook_book
 
 def get_shop_list_by_dishes(dishes, person_count):
-    ingr_list = dict()
-
-    for dish_name in dishes:  # итерируем список полученных блюд
-        if dish_name in cook_book:
-            for ings in cook_book[dish_name]:  # итерируем ингридиенты в блюде
-                meas_quan_list = dict()
-                if ings['ingredient_name']not in ingr_list:
-                    meas_quan_list['measure'] = ings['measure'].strip()
-                    meas_quan_list['quantity'] = ings['quantity'] * person_count
-                    ingr_list[ings['ingredient_name'].strip()] = meas_quan_list
-                else:
-                    ingr_list[ings['ingredient_name'].strip()]['quantity'] = ingr_list[ings['ingredient_name'].strip()]['quantity'] + \
-                                                                     ings['quantity'] * person_count
-
-        else:
-            print(f'\n"Такого блюда нет в списке!"\n')
-    return ingr_list
+    cook_book = read_cookbook()
+    dish_list = {}
+    for dish_name in dishes:
+        for ingredients in cook_book.get(dish_name, []):
+            if ingredients['ingredient_name'] in dish_list:
+                dish_list[ingredients['ingredient_name']]['quantity'] += ingredients['quantity'] * person_count
+            else:
+                dish_list[ingredients['ingredient_name']] = {'quantity': ingredients['quantity'] * person_count,
+                                                             'measure': ingredients['measure']}
+    return dish_list
 
 
 def write_func():
@@ -75,9 +68,8 @@ write_func()
 
 if __name__ == '__main__':
     filename = "recipes.txt"
-    cook_book = read_cookbook()
     print('Задание 1------------------------------------------------------------')
-    print(f'cook_book = {cook_book}')
+    print(read_cookbook())
     print('Задание 2------------------------------------------------------------')
     pprint(get_shop_list_by_dishes(dishes=['Запеченный картофель', 'Омлет'], person_count=2))
     print('Задание 3------------------------------------------------------------')
