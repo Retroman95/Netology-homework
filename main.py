@@ -1,5 +1,4 @@
 import os
-import 
 import datetime
 import json
 from tqdm import tqdm
