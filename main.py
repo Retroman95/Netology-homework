@@ -76,7 +76,7 @@ class VkRequest:
         picture_dict = self._get_logs_only()
         counter = 0
         for elem in picture_dict.keys():
-            for   valueinpicture_dict[elem]:
+            for   value in picture_dict[elem]:
                 if len(picture_dict[elem]) == 1:
                     file_name = f'{value["likes_count"]}.jpeg'
                 else:
